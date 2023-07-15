@@ -1,0 +1,18 @@
+# description		: Super simple wallpaper aplication for wayland
+# homepage		: https://codeberg.com/dnkl/wbg
+# depends		: pixman wayland libjpeg-turbo libpng
+
+name=wbg
+version=1.1.0
+release=1
+source="$name-$version.tar.gz::https://codeberg.org/dnkl/$name/archive/$version.tar.gz"
+
+build() {
+	venom-meson $name build \
+	-Dpng=enabled \
+	-Djpeg=enabled \
+	-Dwebp=disabled
+	
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}
