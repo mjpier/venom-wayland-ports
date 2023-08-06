@@ -1,0 +1,17 @@
+# description		: Efficient dynamic menu for Wayland
+# homepage		: https://git.sr.ht/~adnano/wmenu
+# depends		: libxkbcommon pango cairo wayland-protocols meson
+
+name=wmenu
+version=0.1.4
+release=1
+source="$name-$version.tar.gz::https://git.sr.ht/~adnano/wmenu/archive/$version.tar.gz"
+
+build() {
+
+	sed '34d' -i $name-$version/meson.build
+	venom-meson $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+}

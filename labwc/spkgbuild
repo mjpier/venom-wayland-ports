@@ -3,8 +3,8 @@
 # depends		: pango meson wlroots
 
 name=labwc
-version=0.6.4.230714
-_commit="6b83db34afca59686d36a458b527b71355680d48"
+version=0.6.4.230717
+_commit=b816c1670150e265719b2fc2ff2a149b50181298
 release=1
 source="$name-$version.tar.gz::https://github.com/labwc/labwc/archive/$_commit.tar.gz"
 

@@ -7,16 +7,17 @@ release=1
 source="https://github.com/swaywm/sway/releases/download/$version/sway-$version.tar.gz"
 
 build() {
+  venom-meson $name-$version build \
+    -Ddefault-wallpaper=false \
+    -Dzsh-completions=false \
+    -Dbash-completions=false \
+    -Dfish-completions=false \
+    -Dswaybar=false \
+    -Dswaynag=false \
+    -Dtray=disabled \
+    -Dxwayland=disabled \
+    -Dwerror=false
+  meson compile -C build
+  DESTDIR=$PKG meson install --no-rebuild -C build
 
-	venom-meson $name-$version build \
-	   -D werror=false \
-	   -D swaybar=false \
-	   -D b_ndebug=true 
-	meson compile -C build
-	DESTDIR=$PKG meson install --no-rebuild -C build
-	# remove things
-	rm -r $PKG/usr/share/bash*
-	rm -r $PKG/usr/share/fish
-	rm -r $PKG/usr/share/zsh
-	rm -r $PKG/usr/share/backgrounds
 }

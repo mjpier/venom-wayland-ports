@@ -1,0 +1,18 @@
+# description	: keymap compiler and support library
+# depends	: libxcb meson libxml2 xkeyboard-config
+
+name=libxkbcommon
+version=1.5.0
+release=1
+source="https://xkbcommon.org/download/$name-$version.tar.xz"
+
+build() {
+
+	venom-meson $name-$version build \
+	-Denable-wayland=true \
+	-Denable-docs=false \
+	-Ddefault-layout=es \
+	-Ddefault-variant="nodeadkeys"
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

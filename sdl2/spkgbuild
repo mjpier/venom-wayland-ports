@@ -1,0 +1,21 @@
+# description	: Cross-platform library designed to make it easy to write multimedia software
+# depends	: wayland-protocols pulseaudio alsa-lib mesa cmake
+
+name=sdl2
+version=2.28.2
+release=1
+source="$name-$version.tar.gz::https://www.libsdl.org/release/SDL2-$version.tar.gz"
+
+build() {
+
+	cmake -S SDL2-$version -B build -G Ninja  \
+	-D CMAKE_INSTALL_PREFIX=/usr \
+	-D CMAKE_INSTALL_LIBDIR=lib \
+	-D CMAKE_BUILD_TYPE=Release \
+	-D SDL_CLOCK_GETTIME=ON \
+	-D SDL_RPATH=OFF 
+	
+	cmake --build build 
+	DESTDIR=$PKG cmake --install build
+}
+	

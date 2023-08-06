@@ -1,0 +1,23 @@
+# description	    : Image viewer for Sway
+# homepage	    : https://github.com/artemsen/swayimg
+# depends	    : meson wayland-protocols libxkbcommon libjpeg-turbo libpng
+
+name=swayimg
+version=1.12
+release=1
+source="https://github.com/artemsen/$name/archive/v$version/$name-$version.tar.gz"
+
+build() {
+
+    venom-meson $name-$version build \
+		-D heif=disabled \
+		-D jxl=disabled \
+		-D svg=disabled \
+		-D webp=disabled \
+		-D gif=disabled \
+		-D bash=disabled \
+		-D zsh=disabled \
+		-D version=$version
+    meson compile -C build
+    DESTDIR=$PKG meson install --no-rebuild -C build
+}

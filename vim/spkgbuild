@@ -1,0 +1,75 @@
+# description	    : Highly configurable text editor
+# homepage	    : https://www.vim.org/
+# depends	    : ncurses acl
+
+name=vim
+version=9.0.1677
+release=1
+source="https://github.com/vim/vim/archive/v${version}/$name-$version.tar.gz"
+
+build() {
+
+	cd $name-$version
+
+	sed -i '/^CFLAGS/d' Makefile
+
+	./configure \
+		--prefix=/usr \
+		--enable-multibyte \
+		--disable-perlinterp \
+		--disable-pythoninterp \
+		--disable-rubyinterp \
+		--disable-netbeans \
+		--disable-gpm \
+		--disable-gui \
+		--disable-xim \
+		--disable-rightleft \
+		--disable-arabic \
+		--disable-canberra \
+		--with-tlib=ncursesw \
+		--disable-nls \
+		--with-features=normal \
+		--without-x 
+
+	make
+	make DESTDIR=$PKG install
+
+	mv $PKG/usr/share/man/man1 $SRC/man1
+	rm -rf $PKG/usr/share/man/*
+	mv $SRC/man1 $PKG/usr/share/man/man1
+
+	# no desktop files and icons
+	rm -rf $PKG/usr/share/applications \
+	      $PKG/usr/share/icons
+	# remove macros
+	rm -rf $PKG/usr/share/vim/vim90/macros
+	
+	# remove tutor
+	rm -rf $PKG/usr/share/man/man?/vimtutor*
+	rm -rf $PKG/usr/share/vim/vim90/tutor
+	rm -f $PKG/bin/vitutor
+	# remove readme's
+	rm -f $PKG/usr/share/vim/vim90/*/README.txt
+
+	mkdir -pv $PKG/etc
+
+cat > $PKG/etc/vimrc << "EOF"
+" Begin /etc/vimrc
+
+" Ensure defaults are set before customizing settings, not after
+source $VIMRUNTIME/defaults.vim
+let skip_defaults_vim=1 
+
+set nocompatible
+set backspace=2
+set mouse=
+syntax on
+if (&term == "xterm") || (&term == "putty")
+  set background=dark
+endif
+
+" End /etc/vimrc
+EOF
+
+	ln -sv vim $PKG/usr/bin/vi
+}
